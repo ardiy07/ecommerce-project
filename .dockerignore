@@ -1,0 +1,31 @@
+# Mengabaikan direktori build
+build/
+target/
+
+# Mengabaikan file Maven dan Gradle cache
+.gradle/
+
+# Mengabaikan file konfigurasi IDE
+*.iml
+.idea/
+.vscode/
+
+# Mengabaikan file log dan sementara
+*.log
+*.tmp
+*.swp
+*.bak
+*.jar
+
+# Mengabaikan file tertentu
+.DS_Store
+*.class
+
+# nodejs
+node_modules/
+package-lock.json
+
+.env
+
+Dockerfile
+docker-compose.yml
