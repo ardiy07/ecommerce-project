@@ -25,9 +25,29 @@ services:
     volumes:
       - ./services/auth-service:/usr/src/app
       - ./services/auth-service/node_modules:/usr/src/app/node_modules
+    env_file:
+      - ./services/auth-service/.env
+    networks:
+      - ecommerce
+
+  #database
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=admin
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - ecommerce
 
 networks:
   ecommerce:
     driver: bridge
+
+volumes:
+  mysql_data:
