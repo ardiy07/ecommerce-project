@@ -3,7 +3,7 @@ const {
   verifyRefreshToken,
   generateToken,
   getExperiedAt,
-} = require("../utils/jwtUtil");
+} = require("../helpers/jwtHelper");
 
 const refreshTokenUsecase = async (refreshToken) => {
   const transaction = await sequelize.transaction();

@@ -4,7 +4,7 @@ const {
   getExperiedAt,
   generateToken,
   generateRefreshToken,
-} = require("../utils/jwtUtil");
+} = require("../helpers/jwtHelper");
 
 const loginUsecase = async (email, password) => {
   const transaction = await sequelize.transaction();

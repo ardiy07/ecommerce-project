@@ -17,10 +17,36 @@ const loginUser = async (req, res) => {
   }
 };
 
-const registerUser = async (req, res) => {
+const sendOtpToEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await RegisterUseCase.sendOtpToEmail(email);
+    res.status(200).json({
+      status: "success",
+      message: "OTP sent to email",
+    });
+  } catch (error) {
+    res.status(500).json({ status: "failed", message: error.message });
+  }
+}
+
+const validateOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await RegisterUseCase.validateOtpCode(email, otp);
+    res.status(200).json({
+      status: "success",
+      message: "OTP verified successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ status: "failed", message: error.message });
+  }
+};
+
+const createUserAccount = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await RegisterUseCase({ email, password });
+    const user = await RegisterUseCase.createUserAccount({ email, password });
     res.status(200).json({
       status: "success",
       message: "Register successfully",
@@ -66,7 +92,9 @@ const refreshToken = async (req, res) => {
 
 module.exports = {
   loginUser,
-  registerUser,
+  createUserAccount,
+  sendOtpToEmail,
+  validateOtp,
   logoutUser,
   refreshToken,
 };
