@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole{
+  CUSTOMER
+  SELLER
+  ADMIN
+}
+
+enum UserStatus{
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+model User{
+  id  Int @id @default(autoincrement())
+  username String @db.VarChar(100)
+  email String @unique @db.VarChar(100)
+  password String
+  role UserRole @default(CUSTOMER)
+  status UserStatus @default(PENDING)
+  session Session[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Session{
+  id String @id @default(cuid())
+  user_id Int
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  access_token String? @db.VarChar(255)
+  refresh_token String? @db.VarChar(255)
+  ip_address String?
+  user_agent String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("sessions")
+}

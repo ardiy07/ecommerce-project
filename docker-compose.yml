@@ -1,0 +1,115 @@
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecommerce_network
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ecommerce_network
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecommerce_network
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    restart: always
+    ports:
+      - ${ZOOKEEPER_PORT}:2181
+    volumes:
+      - zookeeper_data:/bitnami
+    networks:
+      - ecommerce_network
+  kafka:
+    image: docker.io/bitnami/kafka:latest
+    container_name: kafka
+    restart: always
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_PORT}
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:${KAFKA_PORT_EKSTERNAL},INTERNAL://0.0.0.0:${KAFKA_PORT_INTERNAL}
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:${KAFKA_PORT_EKSTERNAL},INTERNAL://kafka:${KAFKA_PORT_INTERNAL}
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL=PLAINTEXT
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ADDITIONAL_CONFIGS=auto.create.topics.enable=true
+    volumes:
+      - kafka_data:/bitnami
+    ports:
+      - ${KAFKA_PORT_EKSTERNAL}:9092
+    depends_on:
+      - zookeeper
+    networks:
+      - ecommerce_network
+
+  auth-service:
+    build: 
+      context: ./service/auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: always
+    ports:
+      - 3005:3005
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+    networks:
+      - ecommerce_network
+  notifikasi-service:
+    build:
+      context: ./service/notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    restart: always
+    depends_on:
+      - kafka
+    networks:
+      - ecommerce_network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  kafka_data:
+    driver: local
+  zookeeper_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  ecommerce_network:
+    driver: bridge
