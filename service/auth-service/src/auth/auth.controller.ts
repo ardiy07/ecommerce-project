@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Req } from '@nestjs/common';
+import { Body, Get, Controller, HttpCode, Post, Req } from '@nestjs/common';
 import {
   AuthResponse,
   LogoutUserRespon,
@@ -9,7 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { WebResponse } from 'src/model/web.model';
 
-@Controller('/api/v1/auth')
+@Controller('/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

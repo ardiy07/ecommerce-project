@@ -1,31 +1,33 @@
-# Node modules (except the production build)
+# Ignore node_modules (will be re-installed in Docker)
 node_modules
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-test
 
-# Logs
-logs
-*.log
-
-# Build artifacts (will be created during the build process)
+# Ignore build output (dist)
 dist
 
-# Environment variables (use specific .env files instead)
-.env
-!.env.production
+# Ignore environment files (sensitive information should not be copied)
+.env*
+docker/dev/.env.development
+docker/prod/.env.production
 
-# Temporary files and directories
-tmp
-.cache
-.vscode
+# Ignore local config files
+*.local
+
+# Ignore test files
+test/
+*.spec.ts
+*.test.ts
+
+# Ignore temporary files and OS-specific files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
 
-# Git files
+# Ignore Git files
 .git
 .gitignore
-
-# Docker-specific
-docker-compose.override.yml
-Dockerfile.*

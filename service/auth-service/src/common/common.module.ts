@@ -9,7 +9,6 @@ import { ErrorFilter } from './error.filter';
 import { RedisService } from './redis.service';
 import { JwtService } from './jwt.service';
 import { KafkaService } from './kafka.service';
-import * as path from 'path';
 
 @Global()
 @Module({
