@@ -1,0 +1,19 @@
+services:
+  auth-service:
+    env_file:
+      - ./service/auth-service/${ENV_FILE}
+    volumes:
+      - ./service/auth-service:/app
+    command: npm run start:dev
+  notification-service:
+    env_file:
+      - ./service/notification-service/${ENV_FILE}
+    volumes:
+      - ./service/notification-service:/app
+    command: npx nodemon src/index.js
+  user-service:
+    env_file:
+      - ./service/user-service/${ENV_FILE}
+    volumes:
+      - ./service/user-service:/app
+    command: npm run start:dev
