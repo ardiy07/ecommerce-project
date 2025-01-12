@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true   
+
+server:
+  address: ${SPRING_SERVER_ADDRESS}
+  port: ${SPRING_SERVER_PORT}
+
+
+jwt:
+  secret: ${JWT_SECRET}

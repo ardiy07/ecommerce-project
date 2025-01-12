@@ -1,0 +1,23 @@
+# Abaikan folder build/output Maven
+target/
+!*.jar
+
+# Abaikan file konfigurasi IDE
+.idea/
+*.iml
+.vscode/
+
+# Abaikan file sementara OS
+.DS_Store
+Thumbs.db
+
+# Abaikan file log
+logs/
+*.log
+
+# Abaikan file environment atau konfigurasi sensitif
+.env
+
+# Abaikan file dan folder terkait Git
+.git/
+.gitignore
