@@ -169,7 +169,7 @@ export class AuthService {
     }
 
     const token = await this.jwtService.generateToken({
-      id: user.id,
+      userId: user.id,
       email: user.email,
       username: user.username,
       role: user.role,
